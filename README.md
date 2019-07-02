@@ -3,6 +3,10 @@ This python script allows you to search for mangas, download chapters and automa
 
 Thus making your manga ready to upload to your Kindle and enjoy.
 
+## Dependencies:
+KCC
+Python3
+
 ## Usage:
 Simple place the manga_downloader.py file in the parent folder you would like to download the files in. Locate the file in terminal and type:
 
