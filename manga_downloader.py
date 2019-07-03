@@ -16,7 +16,7 @@ logging.basicConfig(
     format=LOG_FORMAT,
     filemode='a')
 logger = logging.getLogger()
-
+LOG_FOLDER = "Logs/"
 SOURCE_LINK = 'https://www.mangareader.net'
 
 regex_chapter_number = re.compile(r".*\D+")
@@ -46,10 +46,13 @@ def checkForNewChapter(chapter_list, manga_name):
     """
     Compares the list created by listChapters with the directory and returns the chapters that has not been downloaded.
     """
-    manga_documentation_file = manga_name + ".log"
+    manga_documentation_file = LOG_FOLDER + manga_name + ".log"
+    print(manga_documentation_file)
     if os.path.exists(manga_documentation_file):
+        print("File exists")
         f = open(manga_documentation_file, "r")
-        downloaded_chapters = f.readlines()
+        downloaded_chapters = map(lambda chapter: re.sub(r"\n$", "", chapter), f.readlines())
+        print(downloaded_chapters)
         f.close()
         new_chaps = [
             chapter for chapter in chapter_list if chapter[1] not in downloaded_chapters
@@ -100,8 +103,10 @@ def document_downloaded_chapter(manga_name, chapter_name):
     """
     logger.info("Documents that chapter %s has been downloaded." %
                 chapter_name)
-    log_files = glob.glob("*.log")
-    manga_documentation_file = manga_name + ".log"
+    if not os.path.exists(LOG_FOLDER):
+        os.mkdir(LOG_FOLDER)
+    log_files = glob.glob(LOG_FOLDER + "*.log")
+    manga_documentation_file = LOG_FOLDER + manga_name + ".log"
     if manga_documentation_file in log_files:
         f = open(manga_documentation_file, "a")
     else:
