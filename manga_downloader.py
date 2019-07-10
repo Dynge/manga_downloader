@@ -11,7 +11,6 @@ from subprocess import call
 """ Function used in the script """
 def parsePage(html_string):
     """Parses the raw page to html elements"""
-    logger.debug("Parses the raw page to html elements")
     return BeautifulSoup(html_string, 'html.parser')
 
 
@@ -48,7 +47,6 @@ def checkForNewChapter(chapter_list, manga_name):
 
 
 def download_chapter_page_return_link(url, chapter, folder):
-    logger.info("Parsing following URL: " + url)
     chapter = re.sub(regex_chapter_number, "", chapter.lower())
     html = requests.get(url)
     parsed_pages = parsePage(html.text)
@@ -62,17 +60,12 @@ def download_chapter_page_return_link(url, chapter, folder):
 
 def saveImage(img_tag, image_location):
     """Retrieves the img source and extracts the images and saves to file directory"""
-    logger.debug(
-        "Retrieves the img source and extracts the images and saves to file directory"
-    )
 
     img_url = img_tag['src']
-    logger.debug(img_url)
     if not os.path.exists(image_location):
         os.makedirs(image_location)
     filename = image_location + "/" + img_tag.get('alt') + ".jpg"
     with open(filename, 'wb') as f:
-        logger.debug("Opening the img_url source and saves image")
         if 'http' not in img_url:
             # sometimes an image source can be relative
             # if it is provide the base img_url which also happens
@@ -86,8 +79,6 @@ def document_downloaded_chapter(manga_name, chapter_name):
     """
     Function to document that a chapter has been succesfully installed.
     """
-    logger.info("Documents that chapter %s has been downloaded." %
-                chapter_name)
     if not os.path.exists(LOG_FOLDER):
         os.mkdir(LOG_FOLDER)
     log_files = glob.glob(LOG_FOLDER + "*.log")
@@ -105,7 +96,6 @@ def nextPageLink(img_link, chapter):
     Checks if next page is still current chapter and then creates link if so.
     Else it returns False
     """
-    logger.debug("Gets next page link unless end of chapter.")
     chapter = re.sub(regex_chapter_number, "", chapter)
     if 0 < img_link.find(chapter):
         next_page = SOURCE_LINK + img_link
@@ -127,8 +117,7 @@ def searchForAnime(manga_name):
     for i, j in enumerate(link_names):
         if j != None and manga_name.lower() in j.lower():
             matches.append((links[i].get('href'), j))
-    logger.info("Found %s matche(s): %s" % (len(matches),
-                                            [match[1] for match in matches]))
+            
     return matches
 
 def determineStartEndChapters(chunks, new_chapters, chunk_index):
@@ -165,21 +154,23 @@ def calculateChapterIndex(amount_of_new_chapters, chunk_amount):
     chunks.append(amount_of_new_chapters)
     return(chunks)
 
-def download_chapters(chapters, chunks):
-    chunk_chapter_indexs = calculateChapterIndex(len(new_chapters), chunks)
+def download_chapters(manga_title, chapters, chunks):
+    """
+    Input of chapters and chunks to begin the download of the new chapters and split it into the selected chunk amount.
+    """
+    chunk_chapter_indexs = calculateChapterIndex(len(chapters), chunks)
     chunk_index = 0
-    logger.debug("Chunk_chapter_indexs: %s" % chunk_chapter_indexs)
 
-    for i, chapter in enumerate(new_chapters):
+    for i, chapter in enumerate(chapters):
         print("Downloading %s. %s chapters remaining" %
-            (chapter[1], len(new_chapters) - (i + 1)))
+            (chapter[1], len(chapters) - (i + 1)))
         current_chapter_number = int(re.sub(regex_chapter_number, "", chapter[1]))
-        chapter_start, chapter_end = determineStartEndChapters(chunk_chapter_indexs, new_chapters, chunk_index)
+        chapter_start, chapter_end = determineStartEndChapters(chunk_chapter_indexs, chapters, chunk_index)
         if current_chapter_number > int(chapter_end):
             chunk_index += 1
-            chapter_start, chapter_end = determineStartEndChapters(chunk_chapter_indexs, new_chapters, chunk_index)
-        folder_name = "%s/%s: %s - %s" % (MANGA_TITLE,
-                                        MANGA_TITLE, chapter_start, chapter_end)
+            chapter_start, chapter_end = determineStartEndChapters(chunk_chapter_indexs, chapters, chunk_index)
+        folder_name = "%s/%s: %s - %s" % (manga_title,
+                                        manga_title, chapter_start, chapter_end)
         img_link = download_chapter_page_return_link(
             chapter[0], chapter[1], folder_name)
         next_page = nextPageLink(img_link, chapter[1])
@@ -187,21 +178,18 @@ def download_chapters(chapters, chunks):
             img_link = download_chapter_page_return_link(
                 next_page, chapter[1], folder_name)
             next_page = nextPageLink(img_link, chapter[1])
-        document_downloaded_chapter(MANGA_TITLE, chapter[1])
+        document_downloaded_chapter(manga_title, chapter[1])
         if current_chapter_number == int(chapter_end):
             convertToKindleAndCleanup(folder_name)
 
 
 def convertToKindleAndCleanup(volume_folder):
-    logger.info("Running KindleConversion...")
     call(["kcc-c2e", volume_folder, "-u", "-m", "-r", "1", "-p", "K578", "-b", "2"])
-    logger.info("KindleConversion finished.")
-    logger.info("Cleaning up by deleting for volume...")
     call(["rm", "-rf", volume_folder])
-    logger.info("Cleaned.")
 
 LOG_FOLDER = "Logs/"
 SOURCE_LINK = 'https://www.mangareader.net'
+regex_chapter_number = re.compile(r".*\D+")
 
 if __name__ == "__main__":
     THIS_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -213,7 +201,6 @@ if __name__ == "__main__":
         filemode='a')
     logger = logging.getLogger()
 
-    regex_chapter_number = re.compile(r".*\D+")
 
     """ Inputs search term and finds matches """
     search_term = input("Write the anime to search for: ")
@@ -254,7 +241,7 @@ if __name__ == "__main__":
 
 
     logger.info("Beginning to download chapters...")
-    download_chapters(new_chapters, chunk_amount)
+    download_chapters(MANGA_TITLE, new_chapters, chunk_amount)
 
 
 
