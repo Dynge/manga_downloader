@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     mangas_to_update = [re.sub(r".log", "", manga_log) for manga_log in os.listdir(md.LOG_FOLDER)]
     logger.info("Mangas to update \n%s" % mangas_to_update)
-
+    print("Finding the list of chapters for your mangas...")
     search_results = [md.searchForAnime(manga) for manga in mangas_to_update]
     logger.debug("Search Results \n%s" % search_results)
     exact_matches = [match for manga in search_results for match in manga if match[1] in mangas_to_update]
@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     chapters_pr_manga = [md.listChapters(md.SOURCE_LINK + manga[0]) for manga in exact_matches]
     logger.debug("Listed chapters of size %s" % len(chapters_pr_manga))
-    print("Checking matches for new chapters...")
+    print("Checking your mangas for new chapters...")
     for i, manga in enumerate(exact_matches):
         new_chapters = md.checkForNewChapter(chapters_pr_manga[i], manga[1])
         logger.info("New Chapters for %s\n%s" % (manga[1], new_chapters))
