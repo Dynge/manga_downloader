@@ -11,13 +11,13 @@ if __name__ == "__main__":
     LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
         filename=os.path.join(THIS_PATH, "manga_updater.log"),
-        level=logging.DEBUG,
+        level=logging.INFO,
         format=LOG_FORMAT,
-        filemode='w')
+        filemode='a')
     logger = logging.getLogger()
 
     mangas_to_update = [re.sub(r".log", "", manga_log) for manga_log in os.listdir(md.LOG_FOLDER)]
-    logger.debug("Mangas to update \n%s" % mangas_to_update)
+    logger.info("Mangas to update \n%s" % mangas_to_update)
 
     search_results = [md.searchForAnime(manga) for manga in mangas_to_update]
     logger.debug("Search Results \n%s" % search_results)
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     for i, manga in enumerate(exact_matches):
         new_chapters = md.checkForNewChapter(chapters_pr_manga[i], manga[1])
-        logger.debug("New Chapters for %s\n%s" % (manga[1], new_chapters))
+        logger.info("New Chapters for %s\n%s" % (manga[1], new_chapters))
         if len(new_chapters) > 0:
             chunks = int(input("%s new chapter(s) for manga titled: %s\n\
                 Select the amount of chunks to split this into: " % (len(new_chapters), manga[1])))
