@@ -15,6 +15,7 @@ if __name__ == "__main__":
         format=LOG_FORMAT,
         filemode='a')
     logger = logging.getLogger()
+    
 
     mangas_to_update = [re.sub(r".log", "", manga_log) for manga_log in os.listdir(md.LOG_FOLDER)]
     logger.info("Mangas to update \n%s" % mangas_to_update)
