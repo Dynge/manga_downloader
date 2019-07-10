@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     chapters_pr_manga = [md.listChapters(md.SOURCE_LINK + manga[0]) for manga in exact_matches]
     logger.debug("Listed chapters of size %s" % len(chapters_pr_manga))
-
+    print("Checking matches for new chapters...")
     for i, manga in enumerate(exact_matches):
         new_chapters = md.checkForNewChapter(chapters_pr_manga[i], manga[1])
         logger.info("New Chapters for %s\n%s" % (manga[1], new_chapters))
@@ -38,3 +38,4 @@ if __name__ == "__main__":
             md.download_chapters(manga[1], new_chapters, chunks)
         else: 
             logger.info("No new chapters for manga titled: %s" % manga[1])
+    print("Finished updating your mangas.")
