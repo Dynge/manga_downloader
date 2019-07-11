@@ -97,7 +97,7 @@ def nextPageLink(img_link, chapter):
     Else it returns False
     """
     chapter = re.sub(regex_chapter_number, "", chapter)
-    if 0 < img_link.find(chapter):
+    if "/%s/" % chapter in img_link:
         next_page = SOURCE_LINK + img_link
         return (next_page)
     else:
@@ -196,7 +196,7 @@ if __name__ == "__main__":
     LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
         filename=os.path.join(THIS_PATH, "manga_downloader.log"),
-        level=logging.INFO,
+        level=logging.DEBUG,
         format=LOG_FORMAT,
         filemode='a')
     logger = logging.getLogger()
