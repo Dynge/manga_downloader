@@ -35,8 +35,8 @@ def checkForNewChapter(chapter_list, manga_name):
     if os.path.exists(manga_documentation_file):
         #print("File exists")
         f = open(manga_documentation_file, "r")
-        downloaded_chapters = map(lambda chapter: re.sub(r"\n$", "", chapter), f.readlines())
-        #print(downloaded_chapters)
+        downloaded_chapters = list(map(lambda chapter: re.sub(r"\n$", "", chapter), f.readlines()))
+
         f.close()
         new_chaps = [
             chapter for chapter in chapter_list if chapter[1] not in downloaded_chapters
