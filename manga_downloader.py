@@ -8,6 +8,8 @@ import glob
 import sys
 from subprocess import call
 
+#Mangahere
+
 """ Function used in the script """
 def parsePage(html_string):
     """Parses the raw page to html elements"""
