@@ -6,7 +6,7 @@ Thus making your manga ready to upload to your Kindle and enjoy.
 The manga_updater.py is used to update your currently logged mangas such that you do not need to run the script multiple times to get the latests chapters of your favorite manga.
 
 ## Dependencies:
-KCC
+KCC (https://github.com/ciromattia/kcc)
 
 Python3
 
