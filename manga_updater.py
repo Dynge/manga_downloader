@@ -2,6 +2,7 @@ import manga_downloader as md
 import logging
 import os
 import re
+import sys
 import argparse
 import numpy as np
 
@@ -19,7 +20,7 @@ if __name__ == "__main__":
     THIS_PATH = os.path.dirname(os.path.realpath(__file__))
     LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
-        filename=os.path.join(THIS_PATH, "manga_updater.log"),
+        #filename=os.path.join(THIS_PATH, "manga_updater.log"),
         level=logging.INFO,
         format=LOG_FORMAT,
         filemode='a')
@@ -28,7 +29,7 @@ if __name__ == "__main__":
     mangas_to_update = [re.sub(r".log", "", manga_log)
                         for manga_log in os.listdir(md.LOG_FOLDER)]
     logger.info("Mangas to update \n%s" % mangas_to_update)
-    print("Finding the list of chapters for your mangas...")
+    logger.info("Finding the list of chapters for your mangas...")
     search_results = [md.searchForAnime(manga) for manga in mangas_to_update]
     logger.debug("Search Results \n%s" % search_results)
     exact_matches = [
@@ -38,20 +39,20 @@ if __name__ == "__main__":
     chapters_pr_manga = [md.listChapters(
         md.SOURCE_LINK + manga[0]) for manga in exact_matches]
     logger.debug("Listed chapters of size %s" % len(chapters_pr_manga))
-    print("Checking your mangas for new chapters...")
+    logger.info("Checking your mangas for new chapters...")
 
     updateable_mangas = list()
     for i, manga in enumerate(exact_matches):
         new_chapters = md.checkForNewChapter(chapters_pr_manga[i], manga[1])
         if len(new_chapters) > 0:
-            logger.info("New Chapters for %s\n%s" % (manga[1], new_chapters))
-            print("%s new chapter(s) for manga titled: %s" %
+            logger.info("%s new chapter(s) for manga titled: %s" %
                   (len(new_chapters), manga[1]))
             updateable_mangas.append((manga[1], new_chapters))
         else:
-            print("No new chapters for manga titled: %s" % manga[1])
             logger.info("No new chapters for manga titled: %s" % manga[1])
-
+    if not updateable_mangas:
+        logger.info("Exiting script as there is no mangas to update.")
+        sys.exit()
     if args.all == True:
         for manga, new_chapters in updateable_mangas:
             chunks = args.chunk_size
@@ -72,4 +73,5 @@ if __name__ == "__main__":
             logger.info("Downloading %s chapter(s) for manga titled: %s\n" % (
                 len(updateable_mangas[index][1]), updateable_mangas[index][0]))
             md.download_chapters(updateable_mangas[index][0], updateable_mangas[index][1], chunks)   
-    print("Finished updating your mangas.")
+    
+logger.info("Finished updating your mangas.")

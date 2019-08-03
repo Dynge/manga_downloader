@@ -31,9 +31,8 @@ def checkForNewChapter(chapter_list, manga_name):
     Compares the list created by listChapters with the directory and returns the chapters that has not been downloaded.
     """
     manga_documentation_file = LOG_FOLDER + manga_name + ".log"
-    #print(manga_documentation_file)
+    
     if os.path.exists(manga_documentation_file):
-        #print("File exists")
         f = open(manga_documentation_file, "r")
         downloaded_chapters = list(map(lambda chapter: re.sub(r"\n$", "", chapter), f.readlines()))
 
@@ -162,7 +161,7 @@ def download_chapters(manga_title, chapters, chunks):
     chunk_index = 0
 
     for i, chapter in enumerate(chapters):
-        print("Downloading %s. %s chapters remaining" %
+        logger.info("Downloading %s. %s chapters remaining" %
             (chapter[1], len(chapters) - (i + 1)))
         current_chapter_number = int(re.sub(regex_chapter_number, "", chapter[1]))
         chapter_start, chapter_end = determineStartEndChapters(chunk_chapter_indexs, chapters, chunk_index)
@@ -195,8 +194,8 @@ if __name__ == "__main__":
     THIS_PATH = os.path.dirname(os.path.realpath(__file__))
     LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
-        filename=os.path.join(THIS_PATH, "manga_downloader.log"),
-        level=logging.DEBUG,
+        #filename=os.path.join(THIS_PATH, "manga_downloader.log"),
+        level=logging.INFO,
         format=LOG_FORMAT,
         filemode='a')
     logger = logging.getLogger()
@@ -204,12 +203,12 @@ if __name__ == "__main__":
 
     """ Inputs search term and finds matches """
     search_term = input("Write the anime to search for: ")
-    logger.info("Search term input by user was %s." % search_term)
+    logger.info('Search term input by user was "%s".' % search_term)
 
     search_matches = searchForAnime(search_term)
 
     if len(search_matches) < 1:
-        print("No matches.")
+        logger.info("No matches.")
         sys.exit()
 
     """ Inputs match index and downloads new chapters """
@@ -217,10 +216,10 @@ if __name__ == "__main__":
         "Found the following %s matche(s).\n %s \nPlease select one by indexing it (starting from 0): "
         % (len(search_matches), [(i, match[1])
                                 for i, match in enumerate(search_matches)]))
-    logger.info("Index input by user was %s." % match_index)
+    logger.info('Index input by user was "%s".' % match_index)
 
     if not re.match("\d+", match_index):
-        print("Error! Only numbers allowed!")
+        logger.error("Only numbers allowed as input!")
         sys.exit()
 
     MANGA_TITLE = search_matches[int(match_index)][1]
@@ -230,13 +229,13 @@ if __name__ == "__main__":
     new_chapters = checkForNewChapter(match_anime_chapters, MANGA_TITLE)
 
     if len(new_chapters) < 1:
-        print("No new chapters to download.")
+        logger.info("No new chapters to download.")
         sys.exit()
 
     chunk_amount = input("The %s new chapter(s) will be seperated into chunks.\n\
-    Please select the amount of chuncks (~50 chapters per chunk is recommended).\n\
-    Note: -1 will make a chunck for each chapter\n\
-    Insert amount of chunks: " % len(new_chapters))
+Please select the amount of chuncks (max ~50 chapters per chunk is recommended).\n\
+Note: -1 will make a chunck for each chapter\n\
+Insert amount of chunks: " % len(new_chapters))
     chunk_amount = int(chunk_amount)
 
 
