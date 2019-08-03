@@ -234,7 +234,7 @@ if __name__ == "__main__":
         sys.exit()
 
     chunk_amount = input("The %s new chapter(s) will be seperated into chunks.\n\
-    Please select the amount of chuncks.\n\
+    Please select the amount of chuncks (~50 chapters per chunk is recommended).\n\
     Note: -1 will make a chunck for each chapter\n\
     Insert amount of chunks: " % len(new_chapters))
     chunk_amount = int(chunk_amount)
