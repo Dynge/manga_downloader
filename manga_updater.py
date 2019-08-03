@@ -74,4 +74,4 @@ if __name__ == "__main__":
                 len(updateable_mangas[index][1]), updateable_mangas[index][0]))
             md.download_chapters(updateable_mangas[index][0], updateable_mangas[index][1], chunks)   
     
-logger.info("Finished updating your mangas.")
+    logger.info("Finished updating your mangas.")
