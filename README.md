@@ -6,10 +6,10 @@ Thus making your manga ready to upload to your Kindle and enjoy.
 The manga_updater.py is used to update your currently logged mangas such that you do not need to run the script multiple times to get the latests chapters of your favorite manga.
 
 ## Dependencies:
-KCC (source: https://github.com/ciromattia/kcc)
-* Note: Install KCC with $pip install KindleComicConverter *
+* KCC (source: https://github.com/ciromattia/kcc)
+  Note: Install KCC with $pip install KindleComicConverter 
 
-Python3
+* Python3
 
 ## Usage:
 Simple place the manga_downloader.py file in the parent folder you would like to download the files in. Locate the file in terminal and type:
