@@ -1,12 +1,12 @@
-import math
+from subprocess import call
 import requests
+import math
 from bs4 import BeautifulSoup
 import re
 import logging
 import os
 import glob
 import sys
-from subprocess import call
 
 """ Function used in the script """
 def parsePage(html_string):
@@ -168,7 +168,7 @@ def download_chapters(manga_title, chapters, chunks):
         if current_chapter_number > int(chapter_end):
             chunk_index += 1
             chapter_start, chapter_end = determineStartEndChapters(chunk_chapter_indexs, chapters, chunk_index)
-        folder_name = "%s/%s: %s - %s" % (manga_title,
+        folder_name = "%s/%s (%s - %s)" % (manga_title,
                                         manga_title, chapter_start, chapter_end)
         img_link = download_chapter_page_return_link(
             chapter[0], chapter[1], folder_name)
