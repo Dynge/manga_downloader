@@ -192,7 +192,7 @@ if __name__ == "__main__":
     LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
         #filename=os.path.join(THIS_PATH, "manga_downloader.log"),
-        level=logging.DEBUG,
+        level=logging.INFO,
         format=LOG_FORMAT,
         filemode='a')
     logger = logging.getLogger()
