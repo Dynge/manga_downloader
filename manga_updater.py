@@ -4,7 +4,6 @@ import os
 import re
 import sys
 import argparse
-import numpy as np
 
 if __name__ == "__main__":
 
