@@ -184,7 +184,7 @@ def download_chapters(manga_title, chapters, chunks):
 
 def convertToKindleAndCleanup(volume_folder):
     call(["kcc-c2e", volume_folder, "-u", "-m", "-r", "1", "-p", "K578", "-b", "2"])
-    call(["rm", "-rf", volume_folder])
+    call(["RD", "/Q", volume_folder])
 
 LOG_FOLDER = "Logs/"
 SOURCE_LINK = 'https://www.mangareader.net'
