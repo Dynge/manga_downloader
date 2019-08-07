@@ -1,4 +1,4 @@
-from subprocess import call
+from subprocess import call, Popen
 import requests
 import math
 from bs4 import BeautifulSoup
@@ -83,7 +83,7 @@ def document_downloaded_chapter(manga_name, chapter_name):
     
     manga_documentation_file = LOG_FOLDER + manga_name + ".log"
     f = open(manga_documentation_file, "a")
-    f.write(chapter_name + "\n")
+    f.write(chapter_name + "\r\n")
     f.close()
 
 
@@ -181,7 +181,7 @@ def download_chapters(manga_title, chapters, chunks):
 
 def convertToKindleAndCleanup(volume_folder):
     call(["kcc-c2e", volume_folder, "-u", "-m", "-r", "1", "-p", "K578", "-b", "2"])
-    call(["RD", "/Q", volume_folder])
+    Popen(["RD", "/S", "/Q", volume_folder], shell=True)
 
 LOG_FOLDER = "Logs/"
 SOURCE_LINK = 'https://www.mangareader.net'
@@ -192,7 +192,7 @@ if __name__ == "__main__":
     LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
     logging.basicConfig(
         #filename=os.path.join(THIS_PATH, "manga_downloader.log"),
-        level=logging.INFO,
+        level=logging.DEBUG,
         format=LOG_FORMAT,
         filemode='a')
     logger = logging.getLogger()
