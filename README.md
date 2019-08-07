@@ -7,9 +7,25 @@ The manga_updater.py is used to update your currently logged mangas such that yo
 
 ## Dependencies:
 * KCC (source: https://github.com/ciromattia/kcc)
-  Note: Install KCC with $pip install KindleComicConverter 
+  *  Note: Install KCC with $pip3 install KindleComicConverter 
 
 * Python3
+  * Packages: requests, bs4
+
+## Setup
+1. First download Python3 and the packages listed in *Dependencies*:
+
+    $ pip3 install <package_name>.  
+
+2. Download KCC with pip
+
+    $ pip3 install KindleComicConverter
+
+3. Download a KindleGen and follow instructions from https://github.com/ciromattia/kcc/wiki/FAQ (*"Why option to create MOBI is not available"*).
+
+4. IF WINDOWS: Place the KindleGen.exe where the kcc-c2e.exe file in is located in your python scripts folder (mine was located in **C:/Users/USER/AppData/Local/Programs/Python/Python37-32/Scripts**)
+
+The script should now be ready to use. 
 
 ## Usage:
 Simple place the manga_downloader.py file in the parent folder you would like to download the files in. Locate the file in terminal and type:
@@ -17,3 +33,6 @@ Simple place the manga_downloader.py file in the parent folder you would like to
 $ python3 manga_downloader.py
 
 $ python3 manga_updater.py
+
+
+* manga_updater.py has addtional options. Add **-h** to see the help message.
