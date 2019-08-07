@@ -15,7 +15,7 @@ The manga_updater.py is used to update your currently logged mangas such that yo
 * Python3
   * Packages: requests, bs4
 
-## Setup
+## Setup:
 1. First download Python3 and the packages listed in *Dependencies*:
 
     $ pip3 install <package_name>.  
@@ -39,3 +39,10 @@ $ python3 manga_updater.py
 
 
 * manga_updater.py has addtional options. Add **-h** to see the help message.
+
+## Handling Errors:
+Maybe the script could not convert to MOBI format or you lost internet connection half-way through downloading.  
+In this case you might want to try and download the chapters again. Problem is that after downloading each individual chapter the script logs it. Thus next time you run the script on the same manga, the script will see that you have already downloaded several chapters.
+
+In this case go to the log folder (**Logs/**).  
+Find the corresponding log file and open it in a txt editor. Each line represents one chapter of the manga. Delete the lines that represent the chapters wish to download again. *Delete the entire file to download all chapters again*.
