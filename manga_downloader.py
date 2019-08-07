@@ -154,6 +154,8 @@ def download_chapters(manga_title, chapters, chunks):
     """
     Input of chapters and chunks to begin the download of the new chapters and split it into the selected chunk amount.
     """
+    
+    logger = logging.getLogger()
     chunk_chapter_indexs = calculateChapterIndex(len(chapters), chunks)
     chunk_index = 0
 
