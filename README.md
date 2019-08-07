@@ -1,3 +1,6 @@
+# Warning
+This branch is only for Linux and Mac. Select the *windows* branch if you want to use this script on a Windows machine.
+
 # Manga Downloader
 This python script allows you to search for mangas, download chapters and automatically creates a .mobi format file for the manga.
 
