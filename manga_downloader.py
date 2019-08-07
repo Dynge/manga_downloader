@@ -64,7 +64,7 @@ def saveImage(img_tag, image_location):
     if not os.path.exists(image_location):
         os.makedirs(image_location)
     filename = image_location + "/" + img_tag.get('alt') + ".jpg"
-    with open(filename, 'wb') as f:
+    with open(filename, 'wb+') as f:
         if 'http' not in img_url:
             # sometimes an image source can be relative
             # if it is provide the base img_url which also happens
@@ -80,12 +80,9 @@ def document_downloaded_chapter(manga_name, chapter_name):
     """
     if not os.path.exists(LOG_FOLDER):
         os.mkdir(LOG_FOLDER)
-    log_files = glob.glob(LOG_FOLDER + "*.log")
+    
     manga_documentation_file = LOG_FOLDER + manga_name + ".log"
-    if manga_documentation_file in log_files:
-        f = open(manga_documentation_file, "a")
-    else:
-        f = open(manga_documentation_file, "w")
+    f = open(manga_documentation_file, "a")
     f.write(chapter_name + "\n")
     f.close()
 
