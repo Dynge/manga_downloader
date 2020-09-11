@@ -22,7 +22,7 @@ def listChapters(url):
     """
     html = requests.get(url)
     parsed_html = parsePage(html.text)
-    listing = parsed_html.find(id="listing")
+    listing = parsed_html.find(class_="d48")
     chapters = [
         (SOURCE_LINK + str(link.get("href")), link.string)
         for link in listing.find_all("a")
@@ -56,10 +56,10 @@ def download_chapter_page_return_link(url, chapter, folder):
     html = requests.get(url)
     parsed_pages = parsePage(html.text)
 
-    img_html = parsed_pages.img
+    img_html = parsed_pages.find("img", id="ci")
     saveImage(img_html, folder)
 
-    img_link = img_html.parent.get("href")
+    img_link = img_html["src"]
     return img_link
 
 
@@ -80,7 +80,7 @@ def saveImage(img_tag, image_location):
         f.write(response.content)
 
 
-def document_downloaded_chapter(manga_name, chapter_name):
+def document_downloaded_chapters(manga_name, chapter_start, chapter_end):
     """
     Function to document that a chapter has been succesfully installed.
     """
@@ -88,9 +88,9 @@ def document_downloaded_chapter(manga_name, chapter_name):
         os.mkdir(LOG_FOLDER)
 
     manga_documentation_file = LOG_FOLDER + manga_name + ".log"
-    f = open(manga_documentation_file, "a")
-    f.write(chapter_name + "\n")
-    f.close()
+    with open(manga_documentation_file, "a") as f:
+        for chapter in range(chapter_end - chapter_start) + chapter_start:
+            f.write(chapter_name + "\n")
 
 
 def nextPageLink(img_link, chapter):
@@ -197,9 +197,11 @@ def download_chapters(manga_title, chapters, chunks):
                 next_page, chapter[1], folder_name
             )
             next_page = nextPageLink(img_link, chapter[1])
-        document_downloaded_chapter(manga_title, chapter[1])
+        # document_downloaded_chapters(manga_title, chapter[1])
         if current_chapter_number == int(chapter_end):
             convertToKindleAndCleanup(folder_name)
+            document_downloaded_chapters(manga_title, chapter_start, chapter_end)
+            # DOCUMENT CHAPTERS chapter_start chapter_end
 
 
 def convertToKindleAndCleanup(volume_folder):
