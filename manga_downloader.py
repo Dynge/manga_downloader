@@ -138,12 +138,12 @@ def calculateChapterIndex(amount_of_new_chapters, chunk_amount):
     If chunk_amount == -1 every chapter will get seperate folders
     """
     if chunk_amount == -1:
-        chunks = [i for i in range(0, amount_of_new_chapters, 1)]
+        chunks = list(range(0, amount_of_new_chapters, 1))
         chunks.append(amount_of_new_chapters)
         return chunks
     folder_size_floored = math.floor(amount_of_new_chapters / chunk_amount)
     residual_size = amount_of_new_chapters % chunk_amount
-    chunks = [x for x in range(0, amount_of_new_chapters, folder_size_floored)]
+    chunks = list(range(0, amount_of_new_chapters, folder_size_floored))
     if len(chunks) > chunk_amount:
         del chunks[-1]
     residuals_per_chunk = math.ceil(residual_size / len(chunks))
